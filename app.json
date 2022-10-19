@@ -1,0 +1,31 @@
+{
+  "id": "ee4aa33f-83d3-49da-81ef-1f1df971d3e7",
+  "name": "KTECH_TABLES_TABLEEXT",
+  "publisher": "Pacific",
+  "version": "1.0.0.6",
+  "brief": "",
+  "description": "App Contain table and table Ext",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "20.0.0.0",
+  "idRanges": [
+    {
+      "from": 50000,
+      "to": 50549
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": false,
+    "includeSourceInSymbolFile": false
+  },
+  "runtime": "9.0",
+  "target": "Cloud"
+
+}
