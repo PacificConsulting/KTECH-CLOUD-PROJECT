@@ -737,7 +737,7 @@ report 50017 "Tax Sales Invoice GST"
 
                     UNTIL GLE.NEXT = 0;
                 //Frieght
-
+                recSalesReceivablessetup.Get();
                 recSalesInvoiceLine.RESET;
                 recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Invoice Header"."No.");
                 recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::"G/L Account");

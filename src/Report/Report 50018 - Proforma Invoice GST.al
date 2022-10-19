@@ -623,11 +623,7 @@ report 50018 "Proforma Invoice GST"
                 GetSalesStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
                 repCheck.InitTextVariable;
-                repCheck.FormatNoText(NoText, Round((TotalAmount + IGSTAmount + SGSTAmount + CGSTAmount + Frieght + InsuAmt)), "Sales Header"."Currency Code");
-                AmountinWords[1] := NoText[1];
-
-                //repCheck.InitTextVariable;
-                //repCheck.FormatNoText(AmountinWords, (Round(GrossTotal + TCSAmt + IGSTAmount + CGSTAmount + SGSTAmount + Frieght + Insurance)), "Sales Header"."Currency Code");
+                repCheck.FormatNoText(AmountinWords, Round((TotalAmount + IGSTAmount + SGSTAmount + CGSTAmount + Frieght + InsuAmt)), "Sales Header"."Currency Code");
 
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(CGSTWords, CGSTAmount, "Sales Header"."Currency Code");
@@ -703,7 +699,7 @@ report 50018 "Proforma Invoice GST"
         recCust: Record 18;
         repCheck: Codeunit 50000;
         AmountinWords: array[5] of Text[250];
-        NoText: array[2] of Text[250];
+        NoText: array[2] of Text;
         TotalAmount: Decimal;
         recSalesInvoiceLine: Record 37;
         SrNo: Integer;
