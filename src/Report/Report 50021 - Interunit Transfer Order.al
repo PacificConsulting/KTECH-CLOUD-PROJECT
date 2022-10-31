@@ -352,9 +352,14 @@ report 50021 "Interunit Transfer Order"
                         column(Description; "Transfer Line".Description)
                         {
                         }
+                        column(Units_per_Parcel; "Units per Parcel")
+                        {
+
+                        }
                         column(Quantity; "Transfer Line".Quantity)
                         {
                         }
+
                         column(UOM; "Transfer Line"."Unit of Measure Code")
                         {
                         }

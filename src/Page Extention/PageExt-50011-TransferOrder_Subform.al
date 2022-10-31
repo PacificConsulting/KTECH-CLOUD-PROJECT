@@ -12,6 +12,10 @@ pageextension 50011 Transfer_Order_sunform extends "Transfer Order Subform"
             {
                 ApplicationArea = all;
             }
+            field("Units per Parcel"; Rec."Units per Parcel")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 

@@ -375,47 +375,15 @@ report 50018 "Proforma Invoice GST"
                         trigger OnAfterGetRecord();
                         begin
                             SrNo += 1;
-                            //TotalAmount += "Sales Line".Amount;
 
-                            // CGST := 0;
-                            // IGST := 0;
-                            // SGST := 0;
-                            // CGSTPer := 0;
-                            // SGSTPer := 0;
-                            // IGSTPer := 0;
-                            // //>>PCPL/BPPL/010
-                            // GLE.RESET;
-                            // GLE.SETRANGE(GLE."Document No.", "Sales Line"."Document No.");
-                            // GLE.SETRANGE(GLE."HSN/SAC Code", "Sales Line"."HSN/SAC Code");
-                            // GLE.SETRANGE(GLE."Transaction Type", GLE."Transaction Type"::Sales);
-                            // IF GLE.FINDSET THEN BEGIN
+                            // TotalAmount := 0;
+                            // recSalesInvoiceLine.RESET;
+                            // recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Header"."No.");
+                            // recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
+                            // IF recSalesInvoiceLine.FINDFIRST THEN
                             //     REPEAT
-                            //         IF GLE."GST Component Code" = 'CGST' THEN BEGIN
-                            //             CGST := ABS(GLE."GST Amount");
-                            //             CGSTPer := GLE."GST %";
-                            //             //MESSAGE(format(CGSTPer));
-                            //         END
-                            //         ELSE
-                            //             IF GLE."GST Component Code" = 'IGST' THEN BEGIN
-                            //                 IGST := ABS(GLE."GST Amount");
-                            //                 IGSTPer := GLE."GST %";
-                            //             END
-                            //             ELSE
-                            //                 IF GLE."GST Component Code" = 'SGST' THEN BEGIN
-                            //                     SGST := ABS(GLE."GST Amount");
-                            //                     SGSTPer := GLE."GST %";
-                            //                 END;
-                            //     UNTIL GLE.NEXT = 0;
-                            // END;
-
-                            TotalAmount := 0;
-                            recSalesInvoiceLine.RESET;
-                            recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Header"."No.");
-                            recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
-                            IF recSalesInvoiceLine.FINDFIRST THEN
-                                REPEAT
-                                    TotalAmount += recSalesInvoiceLine.Amount;
-                                UNTIL recSalesInvoiceLine.NEXT = 0;
+                            //         TotalAmount += recSalesInvoiceLine.Amount;
+                            //     UNTIL recSalesInvoiceLine.NEXT = 0;
                         end;
 
                         trigger OnPreDataItem();
@@ -519,16 +487,14 @@ report 50018 "Proforma Invoice GST"
 
 
 
-                //Amount in Words
-                // TotalAmount := 0;
-                // recSalesInvoiceLine.RESET;
-                // recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Header"."No.");
-                // recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
-                // IF recSalesInvoiceLine.FINDFIRST THEN
-                //     REPEAT
-                //         TotalAmount += recSalesInvoiceLine.Amount;
-                //     UNTIL recSalesInvoiceLine.NEXT = 0;
-
+                TotalAmount := 0;
+                recSalesInvoiceLine.RESET;
+                recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Header"."No.");
+                recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
+                IF recSalesInvoiceLine.FINDFIRST THEN
+                    REPEAT
+                        TotalAmount += recSalesInvoiceLine.Amount;
+                    UNTIL recSalesInvoiceLine.NEXT = 0;
                 //Frieght
                 recSalesReceivablessetup.Get();
                 recSalesInvoiceLine.RESET;
@@ -562,63 +528,6 @@ report 50018 "Proforma Invoice GST"
 
 
 
-                /*
-                SGSTAmount := 0;
-                CGSTAmount := 0;
-                IGSTAmount := 0;
-                GLE.RESET;
-                GLE.SETRANGE(GLE."Document No.", "Sales Header"."No.");
-                GLE.SETRANGE(GLE."Transaction Type", GLE."Transaction Type"::Sales);
-                IF GLE.FINDFIRST THEN
-                    REPEAT
-                        IF GLE."GST Component Code" = 'IGST' THEN BEGIN
-                            IGSTAmount += ABS(GLE."GST Amount");
-                        END
-                        ELSE
-                            IF GLE."GST Component Code" = 'SGST' THEN BEGIN
-                                SGSTAmount += ABS(GLE."GST Amount");
-                            END ELSE
-                                IF GLE."GST Component Code" = 'CGST' THEN BEGIN
-                                    CGSTAmount += ABS(GLE."GST Amount");
-                                END;
-
-                    UNTIL GLE.NEXT = 0;
-                    */
-                /*
-                Frieght := 0;
-                Insurance := 0;
-                OtherCharges := 0;
-                PostedStrOrderdetailLines.RESET;
-                PostedStrOrderdetailLines.SETRANGE("Document Type",PostedStrOrderdetailLines."Document Type"::Invoice);
-                PostedStrOrderdetailLines.SETRANGE(Type,PostedStrOrderdetailLines.Type::Sale);
-                PostedStrOrderdetailLines.SETRANGE("Invoice No.","Sales Header"."No.");
-                IF PostedStrOrderdetailLines.FINDFIRST THEN REPEAT
-                   IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      OtherCharges += PostedStrOrderdetailLines.Amount
-                   ELSE IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      Frieght += PostedStrOrderdetailLines.Amount
-                   ELSE IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      Insurance += PostedStrOrderdetailLines.Amount;
-                UNTIL PostedStrOrderdetailLines.NEXT=0;
-                */
-                ///<<PCPl/pooja/064   300922
-                /*
-                PostedStrOrderdetailLines.RESET;
-                //PostedStrOrderdetailLines.SETRANGE("Document Type",PostedStrOrderdetailLines."Document Type"::Invoice);
-                PostedStrOrderdetailLines.SETRANGE(Type, PostedStrOrderdetailLines.Type::Sale);
-                PostedStrOrderdetailLines.SETRANGE("Document No.", "Sales Header"."No.");
-                IF PostedStrOrderdetailLines.FINDFIRST THEN
-                    REPEAT
-                        IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type"::Charges THEN
-                            IF (PostedStrOrderdetailLines."Tax/Charge Group" = 'FREIGHT') OR (PostedStrOrderdetailLines."Tax/Charge Group" = 'COURIER') THEN
-                                Frieght += PostedStrOrderdetailLines.Amount
-                            ELSE
-                                IF PostedStrOrderdetailLines."Tax/Charge Group" = 'INSURANCE' THEN
-                                    InsuAmt += PostedStrOrderdetailLines.Amount;
-
-                    UNTIL PostedStrOrderdetailLines.NEXT = 0;
-                    */
-                //>>PCPl/pooja/064   300922
 
                 GetSalesStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
@@ -758,6 +667,7 @@ report 50018 "Proforma Invoice GST"
        var GSTAmount: Decimal; var GSTPercent: Decimal)
     var
         SalesLine: Record "Sales Line";
+        TotalAmountLine: Decimal;
     begin
         Clear(GSTAmount);
         Clear(SGSTAmount);
@@ -773,7 +683,7 @@ report 50018 "Proforma Invoice GST"
             repeat
                 GSTAmount += GetGSTAmount(SalesLine.RecordId());
                 GSTPercent += GetGSTPercent(SalesLine.RecordId());
-                TotalAmount += SalesLine."Line Amount" - SalesLine."Line Discount Amount";
+                TotalAmountLine += SalesLine."Line Amount" - SalesLine."Line Discount Amount";
                 GetGSTAmounts(SalesLine);
             until SalesLine.Next() = 0;
     end;

@@ -5040,7 +5040,7 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=(Fields!TotalAmount.Value)+Fields!Frieght.Value+Fields!Insurance.Value</Value>
+                          <Value>=First(Fields!TotalAmountFooter.Value, "DataSet_Result")+Fields!Frieght.Value+Fields!Insurance.Value</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -5080,7 +5080,7 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value</Value>
+                          <Value>=First(Fields!TotalGSTAmountFinal.Value, "DataSet_Result")</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -5121,7 +5121,7 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value+(Fields!TotalAmount.Value)+Fields!Frieght.Value+Fields!Insurance.Value</Value>
+                          <Value>=First(Fields!TotalAmountFooter.Value, "DataSet_Result")+Fields!Frieght.Value+Fields!Insurance.Value+First(Fields!TotalGSTAmountFinal.Value, "DataSet_Result")</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -5541,6 +5541,24 @@ End Function
         </Field>
         <Field Name="IGSTTotFormat">
           <DataField>IGSTTotFormat</DataField>
+        </Field>
+        <Field Name="TotalGSTAmountFinal">
+          <DataField>TotalGSTAmountFinal</DataField>
+        </Field>
+        <Field Name="TotalGSTAmountFinalFormat">
+          <DataField>TotalGSTAmountFinalFormat</DataField>
+        </Field>
+        <Field Name="TotalGSTAmount">
+          <DataField>TotalGSTAmount</DataField>
+        </Field>
+        <Field Name="TotalGSTAmountFormat">
+          <DataField>TotalGSTAmountFormat</DataField>
+        </Field>
+        <Field Name="TotalAmountFooter">
+          <DataField>TotalAmountFooter</DataField>
+        </Field>
+        <Field Name="TotalAmountFooterFormat">
+          <DataField>TotalAmountFooterFormat</DataField>
         </Field>
         <Field Name="AmounttoVendor_PurchaseHeader">
           <DataField>AmounttoVendor_PurchaseHeader</DataField>

@@ -7690,7 +7690,7 @@ Cstr(Fields!CustAddr1.Value),1)</Hidden>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=Fields!TotalAmount.Value+(Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)+(Fields!Frieght.Value)</Value>
+                          <Value>=Fields!TotalAmount.Value+(Fields!CGSTAmount.Value+Fields!SGSTAmount.Value+Fields!IGSTAmount.Value)+(Fields!Frieght.Value)+Fields!Insurance.Value</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
