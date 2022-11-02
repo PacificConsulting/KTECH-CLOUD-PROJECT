@@ -46,8 +46,27 @@ pageextension 50004 Sales_Order_Ext extends "Sales Order"
                     SH.RESET;
                     SH.SETRANGE(SH."No.", rec."No.");
                     REPORT.RUNMODAL(50015, TRUE, TRUE, SH);
+
                 end;
             }
+            action("Panding Order")
+            {
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Process;
+                Image = Print;
+                Caption = 'Panding Order';
+                trigger OnAction()
+                var
+                    SH: Record "Sales Header";
+                begin
+                    SH.RESET;
+                    SH.SETRANGE("No.", rec."No.");
+                    REPORT.RUNMODAL(50032, TRUE, TRUE, SH);
+
+                end;
+            }
+
         }
 
     }

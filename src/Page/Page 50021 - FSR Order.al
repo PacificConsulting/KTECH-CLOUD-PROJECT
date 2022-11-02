@@ -27,7 +27,7 @@ page 50021 "FSR Order"
 
                     trigger OnAssistEdit();
                     begin
-                        IF rec.AssistEditFSR(xRec) THEN
+                        IF Rec.AssistEdit(xRec) THEN
                             CurrPage.UPDATE;
                     end;
 
