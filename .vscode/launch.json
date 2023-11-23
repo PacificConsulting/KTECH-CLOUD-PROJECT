@@ -8,12 +8,13 @@
             "environmentType": "Sandbox",
             "environmentName": "KTechSanbox",
             "tenant": "5b9c8d99-1fd0-48db-bd73-de80ec4a6d62",
-            "startupObjectId": 22,
+            "startupObjectId": 143,
             "startupObjectType": "Page",
             "breakOnError": true,
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
-            "enableSqlInformationDebugger": true
+            "enableSqlInformationDebugger": true,
+            "schemaUpdateMode": "ForceSync"
         }
     ]
 }

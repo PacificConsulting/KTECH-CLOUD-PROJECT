@@ -107,7 +107,7 @@ report 50028 "Commission Report"
                 END;
                 GetStatisticsAmount("Sales Invoice Header", TCSAmt, TCSPercent);
 
-                TotalAmt := TotalAmt + ABS(Amt);
+                TotalAmt := Round(TotalAmt + ABS(Amt));
             end;
         }
     }

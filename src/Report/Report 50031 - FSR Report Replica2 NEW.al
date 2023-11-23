@@ -131,16 +131,16 @@ report 50031 "FSR Report Replica2 NEW"
                 column(PackingSize_SalesLine; "Sales Invoice Line"."Packing Size")
                 {
                 }
-                column(LotNo; LotNo)
-                {
-                }
+                // column(LotNo; LotNo)
+                // {
+                // }
                 column(UnitsperParcel_SalesLine; "Sales Invoice Line"."Units per Parcel")
                 {
                 }
                 column(NoofPackages_SalesLine; "Sales Invoice Line"."No. of Packages")
                 {
                 }
-                column(IdentificationMark_SalesInvoiceLine; '')//"Sales Invoice Line"."Identification Mark")
+                column(LotNoNew; "Sales Invoice Line"."Identification Mark")
                 {
                 }
                 dataitem("Value Entry"; "Value Entry")
@@ -151,9 +151,9 @@ report 50031 "FSR Report Replica2 NEW"
                     dataitem("Item Ledger Entry"; "Item Ledger Entry")
                     {
                         DataItemLink = "Entry No." = FIELD("Item Ledger Entry No.");
-                        column(LotNoNew; "Item Ledger Entry"."Lot No.")
-                        {
-                        }
+                        //    // column(LotNoNew; "Item Ledger Entry"."Lot No.")
+                        //     {
+                        //     }
                     }
                 }
 

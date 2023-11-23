@@ -1,7 +1,7 @@
 report 50017 "Tax Sales Invoice GST"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = 'src\Report Layout\Tax Sales Invoice GST.rdl';
+    RDLCLayout = 'src\Report Layout\Tax Sales Invoice GST QR-2.rdl';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
     dataset
@@ -13,7 +13,24 @@ report 50017 "Tax Sales Invoice GST"
             column(NatureTCS; NatureTCS)
             {
             }
-            column(TcsPercent; TcsPercent)
+            column(QRCode; Einv."E-Invoice QR Code")
+            {
+
+            }
+            column(IRNNo; Einv."E-Invoice IRN No.")
+            {
+
+            }
+            column(Acknowledgement_No_; Einv."E-Invoice Acknowledg No.")
+            {
+
+            }
+            column(Acknowledgement_Date; Einv."E-Invoice Acknowledg Date Time")
+            {
+
+            }
+
+            column(TcsPercent_1; TcsPercent_1)
             {
             }
             column(TCSAmt; TCSAmt)
@@ -28,9 +45,7 @@ report 50017 "Tax Sales Invoice GST"
             column(FrAmt; FrAmt)
             {
             }
-            column(shipPanNo; shipPanNo)
-            {
-            }
+
             column(ShipState; ShipState)
             {
             }
@@ -202,6 +217,19 @@ report 50017 "Tax Sales Invoice GST"
             column(Text006; Text006)
             {
             }
+            column(ShipToGSTRegistration; ShipToGSTRegistration)
+            {
+
+            }
+            column(ShipToPANNo; ShipToPANNo)
+            {
+            }
+
+            column(shipPanNo; shipPanNo)
+            {
+
+            }
+
             dataitem("CopyLoop."; "Integer")
             {
                 DataItemTableView = SORTING("Number");
@@ -332,7 +360,7 @@ report 50017 "Tax Sales Invoice GST"
                         DataItemLinkReference = "Sales Invoice Header";
                         DataItemTableView = WHERE(Type = FILTER(Item),
                                                   Quantity = FILTER(<> 0));
-                        column(BatchNo; '')// "Sales Invoice Line"."Identification Mark")
+                        column(BatchNo; "Sales Invoice Line"."Identification Mark")
                         {
                         }
                         column(DocumentNo_SalesInvoiceLine; "Sales Invoice Line"."Document No.")
@@ -376,6 +404,7 @@ report 50017 "Tax Sales Invoice GST"
                         }
                         column(ItemNo; "Sales Invoice Line"."No.")
                         {
+
                         }
                         column(Description; "Sales Invoice Line".Description)
                         {
@@ -401,6 +430,24 @@ report 50017 "Tax Sales Invoice GST"
                         column(TotalAmount; TotalAmount)
                         {
                         }
+                        column(totalamt; totalamt)
+                        {
+
+                        }
+                        column(Qty; Qty)
+                        {
+
+                        }
+                        column(SL_UnitPrice; SL_UnitPrice)
+                        {
+
+                        }
+                        column(quantity1; quantity1)
+                        {
+
+                        }
+
+
                         dataitem("Value Entry"; "Value Entry")
                         {
                             DataItemLink = "Document No." = FIELD("Document No."),
@@ -412,11 +459,19 @@ report 50017 "Tax Sales Invoice GST"
                                 column(LotNo; "Item Ledger Entry"."Lot No.")
                                 {
                                 }
+                                column(qty1; "Item Ledger Entry".Quantity) //pcpl-065
+                                {
+
+                                }
+
+
                             }
                         }
 
 
                         trigger OnAfterGetRecord();
+
+
                         begin
                             SrNo += 1;
                             //TotalAmount += "Sales Line".Amount;
@@ -450,7 +505,22 @@ report 50017 "Tax Sales Invoice GST"
                                             END;
                                 UNTIL GLE.NEXT = 0;
 
+
+
                             END;
+
+                            // totalamt := "Sales Invoice Line".Quantity * "Sales Invoice Line"."Unit Price"; //pcpl-065
+                            //Message(format(totalamt)); pcpl-065
+
+                            // "Item Ledger Entry".Reset(); //pcpl-065
+                            // "Item Ledger Entry".SetRange("Lot No.",SalesInvLine.lot);
+                            // if "Item Ledger Entry".FindSet() then
+                            //     quantity1 := myquantity.Quantity;
+
+
+
+
+
                             //<<PCPL/MIG/NSW New code add for Tcs Amt Get
                             if SalesInvLine.Get("Sales Invoice Line"."Document No.", "Sales Invoice Line"."Line No.") then
                                 TaxRecordID := SalesInvLine.RecordId();
@@ -463,9 +533,12 @@ report 50017 "Tax Sales Invoice GST"
                             IF recSalesInvoiceLine.FINDFIRST THEN
                                 REPEAT
                                     TotalAmount += recSalesInvoiceLine.Amount;
+
                                 UNTIL recSalesInvoiceLine.NEXT = 0;
 
                             //LineDiscountAmt+="Sales Invoice Line"."Line Discount Amount";
+
+
 
 
 
@@ -505,9 +578,17 @@ report 50017 "Tax Sales Invoice GST"
                         trigger OnPreDataItem();
                         begin
                             NoOfRecords := "Sales Invoice Line".COUNT;
+
+                            //Message(format(NoOfRecords)); //pcpl-065
                             //LineDiscountAmt:=0;
+
                         end;
+
+
+
+
                     }
+
                 }
 
                 trigger OnAfterGetRecord();
@@ -538,6 +619,7 @@ report 50017 "Tax Sales Invoice GST"
                     SrNo := 0;
 
                     CurrReport.PAGENO := 1;
+
                 end;
 
                 trigger OnPreDataItem();
@@ -716,7 +798,7 @@ report 50017 "Tax Sales Invoice GST"
                     // Message(Format(TCSAmt));
                     // Message(Format(TcsPercent));
 
-                    SGSTAmount := 0;
+                SGSTAmount := 0;
                 CGSTAmount := 0;
                 IGSTAmount := 0;
                 GLE.RESET;
@@ -767,31 +849,6 @@ report 50017 "Tax Sales Invoice GST"
                 end;
 
 
-                /*
-                Frieght := 0;
-                Insurance := 0;
-                OtherCharges := 0;
-                PostedStrOrderdetailLines.RESET;
-                PostedStrOrderdetailLines.SETRANGE("Document Type",PostedStrOrderdetailLines."Document Type"::Invoice);
-                PostedStrOrderdetailLines.SETRANGE(Type,PostedStrOrderdetailLines.Type::Sale);
-                PostedStrOrderdetailLines.SETRANGE("Invoice No.","Sales Invoice Header"."No.");
-                IF PostedStrOrderdetailLines.FINDFIRST THEN REPEAT
-                   IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      OtherCharges += PostedStrOrderdetailLines.Amount
-                   ELSE IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      Frieght += PostedStrOrderdetailLines.Amount
-                   ELSE IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                      Insurance += PostedStrOrderdetailLines.Amount;
-                UNTIL PostedStrOrderdetailLines.NEXT=0;
-                PostedStrOrderdetailLines.RESET;
-                PostedStrOrderdetailLines.SETRANGE("Document Type",PostedStrOrderdetailLines."Document Type"::Invoice);
-                PostedStrOrderdetailLines.SETRANGE(Type,PostedStrOrderdetailLines.Type::Sale);
-                PostedStrOrderdetailLines.SETRANGE("Invoice No.","Sales Invoice Header"."No.");
-                IF PostedStrOrderdetailLines.FINDFIRST THEN REPEAT
-                   IF PostedStrOrderdetailLines."Tax/Charge Type" = PostedStrOrderdetailLines."Tax/Charge Type" :: Charges THEN
-                    Frieght+= PostedStrOrderdetailLines.Amount;
-                UNTIL PostedStrOrderdetailLines.NEXT=0;
-                */
                 recSalesInvoiceLine.RESET;
                 recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Sales Invoice Header"."No.");
                 recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
@@ -800,10 +857,18 @@ report 50017 "Tax Sales Invoice GST"
                         GrossTotal += recSalesInvoiceLine.Amount;
                     UNTIL recSalesInvoiceLine.NEXT = 0;
 
+
+                EINV.RESET;
+                EINV.SETRANGE("Document No.", "No.");
+                EINV.SETFILTER("E-Invoice IRN No.", '<>%1', '');
+                IF EINV.FINDFIRST THEN begin
+                    EInv.CalcFields("E-Invoice QR Code")
+                end;
+
                 GetStatisticsAmount("Sales Invoice Header", TCSAmt, TCSPercent);
 
                 repCheck.InitTextVariable;
-                repCheck.FormatNoText(AmountinWords, ROUND((GrossTotal + IGSTAmount + SGSTAmount + CGSTAmount + TCSAmt + Frieght + Insurance)), "Sales Invoice Header"."Currency Code");
+                repCheck.FormatNoText(AmountinWords, ROUND((GrossTotal + IGSTAmount + SGSTAmount + CGSTAmount + TCSAmt + Frieght + Insurance), 1), "Sales Invoice Header"."Currency Code");
 
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(CGSTWords, CGSTAmount, "Sales Invoice Header"."Currency Code");
@@ -814,6 +879,54 @@ report 50017 "Tax Sales Invoice GST"
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(IGSTWOrds, IGSTAmount, "Sales Invoice Header"."Currency Code");
 
+
+                //PCPL-065
+                ShipToAddress1.Reset();
+                ShipToAddress1.SetRange("Customer No.", "Sales Invoice Header"."Sell-to Customer No.");
+                if ShipToAddress1.FindFirst() then;
+
+                Customer.GET("Sales Invoice Header"."Sell-to Customer No.");
+                if ("Sales Invoice Header"."Ship-to Code" <> '') then begin
+                    if ShipToAddress1."Other Consignee" = true then begin
+                        ShipToGSTRegistration := ShipToAddress1."Ship To GST Registration No.";
+                        ShipToPANNo := ShipToAddress1."P.A.N.No.";
+                    end
+                    else begin
+                        ShipToGSTRegistration := Customer."GST Registration No.";
+                        ShipToPANNo := Customer."P.A.N. No.";
+                    end
+
+                end else begin
+                    ShipToGSTRegistration := Customer."GST Registration No.";
+                    ShipToPANNo := Customer."P.A.N. No.";
+                end;
+
+                //PCPL-065
+
+
+
+                //pcpl-065   
+
+                SalesInvLine.RESET;
+                SalesInvLine.SetRange("Document No.", "No."); //pcpl-065
+                if SalesInvLine.FindSet() then
+                    repeat
+                        Qty += SalesInvLine.Quantity;
+                        totalamt += SalesInvLine."Unit Price" * SalesInvLine.Quantity;
+                        if SalesInvLine.Quantity <> 0 then
+                            SL_UnitPrice += SalesInvLine."No. of Packages";
+                    until SalesInvLine.Next() = 0;
+                // Message(format(totalamt));
+
+                AllowedNoc.Reset();
+                AllowedNoc.SetRange("Customer No.", "Sell-to Customer No.");
+                if AllowedNoc.FindFirst() then begin
+                    if AllowedNoc."TCS Nature of Collection" = '206C 1H' then
+                        TcsPercent_1 := 0.1
+                    else
+                        TcsPercent_1 := 1;
+                end;
+                //pcpl-065 
             end;
         }
     }
@@ -851,8 +964,16 @@ report 50017 "Tax Sales Invoice GST"
         FormatAddr.Company(CompanyAddr, CompanyInfo);
     end;
 
+    trigger OnPostReport()
+    begin
+        Message(Format(TcsPercent_1));
+    end;
+
     var
+        VE: record "Value Entry";
+        ILE_1: Record "Item Ledger Entry";
         SalesInvLine: Record 113;
+        EInv: record "E-Invoice Detail";
         GrossTotal: Decimal;
         ComponentJobject: JsonObject;
         TaxRecordID: RecordId;
@@ -931,8 +1052,22 @@ report 50017 "Tax Sales Invoice GST"
         URNNo: Code[17];
         TCSAmt: Decimal;
         TcsPercent: Decimal;
+        TcsPercent_1: Decimal;
         NatureTCS: Text;
         recSalesReceivablessetup: Record "Sales & Receivables Setup";
+        ShipToAddress1: Record "Ship-to Address";
+        ShipToGSTRegistration: Code[20];
+        ShipToPANNo: Code[20];
+        Customer: Record Customer;
+        SIH: Record "Sales Invoice Header";
+        totalamt: Decimal;
+        Qty: Decimal;
+        SL_UnitPrice: Decimal;
+        myquantity: Record "Item Ledger Entry";
+        quantity1: Decimal;
+        SIL1: Record "Sales Invoice Line";
+        UNIT1: Decimal;
+        AllowedNoc: Record "Allowed NOC";
 
     local procedure GetTcsAmtLineWise(TaxRecordID: RecordId; var JObject: JsonObject)
     var
@@ -954,7 +1089,7 @@ report 50017 "Tax Sales Invoice GST"
             ComponentAmt := TaxTypeObjHelper.GetComponentAmountFrmTransValue(TaxTransactionValue);
         end;
         TCSAmt += ComponentAmt;
-        TcsPercent := TaxTransactionValue.Percent;
+        // TcsPercent := TaxTransactionValue.Percent; //pcpl-064 1aug2023
         // Message(Format(TCSAmt));
         // Message(Format(TcsPercent));
     end;
@@ -969,7 +1104,7 @@ report 50017 "Tax Sales Invoice GST"
         RecordIDList: List of [RecordID];
     begin
         Clear(TCSAmount);
-        Clear(TCSPercent);
+        // Clear(TCSPercent);  //pcpl-064 1aug2023
 
         SalesLine.SetRange("Document no.", SalesHeader."No.");
         if SalesLine.FindSet() then
@@ -979,7 +1114,8 @@ report 50017 "Tax Sales Invoice GST"
 
         for i := 1 to RecordIDList.Count() do begin
             TCSAmount += GetTCSAmount(RecordIDList.Get(i));
-            TCSPercent += GetTCSPercent(RecordIDList.Get(i));
+            //TCSPercent += GetTCSPercent(RecordIDList.Get(i)); pcpl-065
+            // TCSPercent := GetTCSPercent(RecordIDList.Get(i)); //pcpl-064 01Aug2023
         end;
 
         TCSAmount := TCSManagement.RoundTCSAmount(TCSAmount);

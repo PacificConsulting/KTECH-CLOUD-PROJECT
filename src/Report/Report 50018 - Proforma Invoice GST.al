@@ -1,7 +1,7 @@
 report 50018 "Proforma Invoice GST"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = 'src\Report Layout\Proforma Invoice GST.rdl';
+    RDLCLayout = 'src\Report Layout\Proforma Invoice GST-1.rdl';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
     dataset
@@ -162,6 +162,14 @@ report 50018 "Proforma Invoice GST"
             }
             column(OtherCharges; OtherCharges)
             {
+            }
+            column(ShipToGSTRegistration; ShipToGSTRegistration)
+            {
+
+            }
+            column(ShipToPANNo; ShipToPANNo)
+            {
+
             }
             dataitem("CopyLoop."; "Integer")
             {
@@ -532,7 +540,7 @@ report 50018 "Proforma Invoice GST"
                 GetSalesStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
 
                 repCheck.InitTextVariable;
-                repCheck.FormatNoText(AmountinWords, Round((TotalAmount + IGSTAmount + SGSTAmount + CGSTAmount + Frieght + InsuAmt)), "Sales Header"."Currency Code");
+                repCheck.FormatNoText(AmountinWords, Round((TotalAmount + IGSTAmount + SGSTAmount + CGSTAmount + Frieght + InsuAmt), 1), "Sales Header"."Currency Code");
 
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(CGSTWords, CGSTAmount, "Sales Header"."Currency Code");
@@ -550,6 +558,27 @@ report 50018 "Proforma Invoice GST"
                 //PCPL50
                 // Message(FORMAT(CGSTPer));
 
+                //PCPL-64 22DEC2022<<
+                ShipToAddress1.Reset();
+                ShipToAddress1.SetRange("Customer No.", "Sales Header"."Sell-to Customer No.");
+                if ShipToAddress1.FindFirst() then;
+
+                Customer.GET("Sales Header"."Sell-to Customer No.");
+                if ("Sales Header"."Ship-to Code" <> '') then begin
+                    if ShipToAddress1."Other Consignee" = true then begin
+                        ShipToGSTRegistration := ShipToAddress1."Ship To GST Registration No.";
+                        ShipToPANNo := ShipToAddress1."P.A.N.No.";
+                    end
+                    else begin
+                        ShipToGSTRegistration := Customer."GST Registration No.";
+                        ShipToPANNo := Customer."P.A.N. No.";
+                    end
+
+                end else begin
+                    ShipToGSTRegistration := Customer."GST Registration No.";
+                    ShipToPANNo := Customer."P.A.N. No.";
+                end;
+                //PCPL-64 22DEC2022>>
             end;
         }
     }
@@ -661,6 +690,11 @@ report 50018 "Proforma Invoice GST"
         GSTCESSLbl: Label 'GST CESS';
         RsLbl: Label 'Rs. ';
         recSalesReceivablessetup: Record "Sales & Receivables Setup";
+        ShipToAddress1: Record "Ship-to Address";
+        Customer: Record Customer;
+        ShipToGSTRegistration: Code[20];
+        ShipToPANNo: Code[20];
+
 
     procedure GetSalesStatisticsAmount(
        SalesHeader: Record "Sales Header";

@@ -25,6 +25,11 @@ pageextension 50012 MyExtension extends "Sales & Receivables Setup"
             {
                 ApplicationArea = all;
             }
+            field("Over Due Mail Date"; Rec."Over Due Mail Date")
+            {
+                ApplicationArea = all;
+            }
+
 
 
 

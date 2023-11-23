@@ -3292,9 +3292,6 @@ End Function
         <Field Name="PackingSize_SalesLine">
           <DataField>PackingSize_SalesLine</DataField>
         </Field>
-        <Field Name="LotNo">
-          <DataField>LotNo</DataField>
-        </Field>
         <Field Name="UnitsperParcel_SalesLine">
           <DataField>UnitsperParcel_SalesLine</DataField>
         </Field>
@@ -3303,9 +3300,6 @@ End Function
         </Field>
         <Field Name="NoofPackages_SalesLine">
           <DataField>NoofPackages_SalesLine</DataField>
-        </Field>
-        <Field Name="IdentificationMark_SalesInvoiceLine">
-          <DataField>IdentificationMark_SalesInvoiceLine</DataField>
         </Field>
         <Field Name="LotNoNew">
           <DataField>LotNoNew</DataField>

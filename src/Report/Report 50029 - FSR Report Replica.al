@@ -116,18 +116,17 @@ report 50029 "FSR Report Replica"
                 column(PackingSize_SalesLine; "Sales Line"."Packing Size")
                 {
                 }
-                column(LotNo; LotNo)
-                {
-                }
                 column(UnitsperParcel_SalesLine; "Sales Line"."Units per Parcel")
                 {
                 }
                 column(NoofPackages_SalesLine; "Sales Line"."No. of Packages")
                 {
                 }
-                column(IdentificationMark_SalesLine; '')//"Sales Line"."Identification Mark")
+                column(IdentificationMark_SalesLine; "Sales Line"."Identification Mark")
                 {
                 }
+
+
 
                 trigger OnAfterGetRecord();
                 begin
@@ -159,12 +158,19 @@ report 50029 "FSR Report Replica"
                     END;*/
 
 
+
+
                     ItemLedgerEntry.RESET;
                     ItemLedgerEntry.SETRANGE(ItemLedgerEntry."Item No.", "Sales Line"."No.");
                     IF ItemLedgerEntry.FINDFIRST THEN BEGIN
                         LotNo := ItemLedgerEntry."Lot No.";
                     END;
                     //PCPL-25
+
+
+
+
+
 
                 end;
 
@@ -190,7 +196,11 @@ report 50029 "FSR Report Replica"
                     DirectNo := recCust."Direct No";
                     designt := recCust.Designation;
                 END;
+
+
+
             end;
+
         }
     }
 

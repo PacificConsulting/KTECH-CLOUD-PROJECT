@@ -1354,7 +1354,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!Amount_SalesInvoiceLine.Value)</Value>
+                                  <Value>=Round(Sum(Fields!Amount_SalesInvoiceLine.Value))</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>0.00</Format>

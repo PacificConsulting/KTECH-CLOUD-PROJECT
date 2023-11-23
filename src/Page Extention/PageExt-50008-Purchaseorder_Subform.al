@@ -22,6 +22,17 @@ pageextension 50008 Purchaseorder_subform extends "Purchase Order Subform"
                 ApplicationArea = all;
             }
         }
+        addafter(Quantity)
+        {
+            // field("Gen. Bus. Posting Group"; Rec."Gen. Bus. Posting Group")
+            // {
+            //     ApplicationArea = all;
+            // }
+            // field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
+            // {
+            //     ApplicationArea = all;
+            // }
+        }
         // Add changes to page layout here
     }
 

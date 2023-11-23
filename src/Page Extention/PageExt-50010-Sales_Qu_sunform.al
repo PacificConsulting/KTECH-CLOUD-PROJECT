@@ -4,10 +4,10 @@ pageextension 50010 Sales_Quote_subform extends "Sales Quote Subform"
     {
         addafter("Units per Parcel")
         {
-            field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
-            {
-                ApplicationArea = all;
-            }
+            // field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
+            // {
+            //     ApplicationArea = all;
+            // }
             field("No. of Packages"; Rec."No. of Packages")
             {
                 ApplicationArea = all;

@@ -2,12 +2,13 @@ pageextension 50005 Sales_order_sunform extends "Sales Order Subform"
 {
     layout
     {
+
         addafter("GST Group Type")
         {
-            field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
-            {
-                ApplicationArea = all;
-            }
+            // field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
+            // {
+            //     ApplicationArea = all;
+            // }
             field("No. of Packages"; Rec."No. of Packages")
             {
                 ApplicationArea = all;
@@ -36,13 +37,37 @@ pageextension 50005 Sales_order_sunform extends "Sales Order Subform"
             field("Technical Function/s"; Rec."Technical Function/s")
             {
                 ApplicationArea = all;
+
+
+
             }
             field("Identification Mark"; Rec."Identification Mark")
             {
                 ApplicationArea = all;
+
+
+
             }
 
+
+
+
         }
+
+
+        addafter("Item Reference No.")
+        {
+            field("Customer Price Group"; Rec."Customer Price Group")
+            {
+                ApplicationArea = all;
+                Visible = true;
+                Editable = true;
+            }
+        }
+
+
+
+
     }
 
     actions

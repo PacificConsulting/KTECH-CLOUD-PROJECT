@@ -1,7 +1,7 @@
 report 50015 "DO Report GST"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = 'src\Report Layout\DO Report GST.rdl';
+    RDLCLayout = 'src\Report Layout\DO Report GST-1.rdl';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
 
@@ -173,6 +173,14 @@ report 50015 "DO Report GST"
             column(DECARRAY5; DECARRAY[5])
             {
             }
+            column(ShipToGSTRegistration; ShipToGSTRegistration)
+            {
+
+            }
+            column(ShipToPANNo; ShipToPANNo)
+            {
+
+            }
             dataitem("CopyLoop."; "Integer")
             {
                 DataItemTableView = SORTING("Number");
@@ -306,6 +314,7 @@ report 50015 "DO Report GST"
                     column(IGSTPer; IGSTPer)
                     {
                     }
+
                     dataitem("Sales Line"; "Sales Line")
                     {
                         DataItemLink = "Document No." = FIELD("No.");
@@ -524,6 +533,7 @@ report 50015 "DO Report GST"
                     SrNo := 0;
 
                     CurrReport.PAGENO := 1;
+
                 end;
 
                 trigger OnPreDataItem();
@@ -671,7 +681,7 @@ report 50015 "DO Report GST"
                 GetSalesStatisticsAmount("Sales Header", TotalGSTAmount, TotalGSTPercent);
                 GetStatisticsAmount("Sales Header", TCSAmt, TcsPercent);
                 repCheck.InitTextVariable;
-                repCheck.FormatNoText(AmountinWords, (Round(GrossTotal + TCSAmt + IGSTAmount + CGSTAmount + SGSTAmount + Frieght + Insurance)), "Sales Header"."Currency Code");
+                repCheck.FormatNoText(AmountinWords, (Round((GrossTotal + TCSAmt + IGSTAmount + CGSTAmount + SGSTAmount + Frieght + Insurance), 1)), "Sales Header"."Currency Code");
 
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(CGSTWords, CGSTAmount, "Sales Header"."Currency Code");
@@ -688,6 +698,29 @@ report 50015 "DO Report GST"
                 IF recCust.FINDFIRST THEN
                     URNNo := recCust."URN No.";
                 //PCPL50
+                //PCPL-64 22DEC2022<<
+                ShipToAddress1.Reset();
+                ShipToAddress1.SetRange("Customer No.", "Sales Header"."Sell-to Customer No.");
+                if ShipToAddress1.FindFirst() then;
+
+                Customer.GET("Sales Header"."Sell-to Customer No.");
+                if ("Sales Header"."Ship-to Code" <> '') then begin
+                    if ShipToAddress1."Other Consignee" = true then begin
+                        ShipToGSTRegistration := ShipToAddress1."Ship To GST Registration No.";
+                        ShipToPANNo := ShipToAddress1."P.A.N.No.";
+                    end
+                    else begin
+                        ShipToGSTRegistration := Customer."GST Registration No.";
+                        ShipToPANNo := Customer."P.A.N. No.";
+                    end
+
+                end else begin
+                    ShipToGSTRegistration := Customer."GST Registration No.";
+                    ShipToPANNo := Customer."P.A.N. No.";
+                end;
+                //PCPL-64 22DEC2022>>
+
+
 
             end;
         }
@@ -782,9 +815,9 @@ report 50015 "DO Report GST"
         ShipToadd: Record 222;
         SHippToGST: Code[25];
         RState: Record "State";
-        BillToState1: Code[25];
+        BillToState1: Code[50];
         BillToStateCode1: Code[20];
-        ShipToState1: Code[25];
+        ShipToState1: Code[50];
         ShipToStateCode1: Code[20];
         BillToPAN: Code[25];
         ShipToPAN: Code[25];
@@ -814,6 +847,10 @@ report 50015 "DO Report GST"
         GSTLbl: Label 'GST';
         GSTCESSLbl: Label 'GST CESS';
         recSalesReceivalesSetup: Record "Sales & Receivables Setup";
+        ShipToAddress1: Record "Ship-to Address";
+        ShipToGSTRegistration: Code[20];
+        ShipToPANNo: Code[20];
+        Customer: Record Customer;
 
     procedure GetSalesStatisticsAmount(
    SalesHeader: Record "Sales Header";

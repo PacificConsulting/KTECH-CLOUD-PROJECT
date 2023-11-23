@@ -24,7 +24,19 @@ pageextension 50004 Sales_Order_Ext extends "Sales Order"
             {
                 ApplicationArea = all;
             }
+            field("Posting No."; Rec."Posting No.")
+            {
+                ApplicationArea = all;
+                Editable = true;
+            }
+            field("Posting No. Series"; Rec."Posting No. Series")
+            {
+                ApplicationArea = all;
+            }
+
+
         }
+
         // Add changes to page layout here
     }
 
@@ -55,7 +67,7 @@ pageextension 50004 Sales_Order_Ext extends "Sales Order"
                 Promoted = true;
                 PromotedCategory = Process;
                 Image = Print;
-                Caption = 'Panding Order';
+                Caption = 'Pending Order';
                 trigger OnAction()
                 var
                     SH: Record "Sales Header";

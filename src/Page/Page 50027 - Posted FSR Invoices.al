@@ -456,7 +456,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::Taxable);
+                    // ShowInvoiceTypeDoc(rec."Invoice Type"::Taxable);
                 end;
             }
             action("Bill of Supply")
@@ -472,7 +472,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::"Bill of Supply");
+                    //ShowInvoiceTypeDoc(Rec."Invoice Type"::"Bill of Supply"); //PCPL/NSW/07
                 end;
             }
             action(Export)
@@ -488,7 +488,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::Export);
+                    // ShowInvoiceTypeDoc(rec."Invoice Type"::Export); //PCPL/NSW/07
                 end;
             }
             action(Supplementary)
@@ -504,7 +504,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::Supplementary);
+                    //ShowInvoiceTypeDoc(rec."Invoice Type"::Supplementary); //PCPL/NSW/07
                 end;
             }
             action("Debit Note")
@@ -520,7 +520,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::"Debit Note");
+                    //ShowInvoiceTypeDoc(rec."Invoice Type"::"Debit Note"); //PCPL/NSW/07//
                 end;
             }
             action("Non GST")
@@ -531,7 +531,7 @@ page 50027 "Posted FSR Invoices"
 
                 trigger OnAction();
                 begin
-                    ShowInvoiceTypeDoc(rec."Invoice Type"::"Non-GST");
+                    //ShowInvoiceTypeDoc(rec."Invoice Type"::"Non-GST"); //PCPL/NSW/07
                 end;
             }
             action("Posted FSR")

@@ -2788,9 +2788,6 @@ End Function
         <Field Name="PackingSize_SalesLine">
           <DataField>PackingSize_SalesLine</DataField>
         </Field>
-        <Field Name="LotNo">
-          <DataField>LotNo</DataField>
-        </Field>
         <Field Name="UnitsperParcel_SalesLine">
           <DataField>UnitsperParcel_SalesLine</DataField>
         </Field>

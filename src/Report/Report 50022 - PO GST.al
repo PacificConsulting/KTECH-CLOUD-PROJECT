@@ -1,7 +1,7 @@
 report 50022 "PO GST"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = 'src\Report Layout\PO GST.rdl';
+    RDLCLayout = 'src\Report Layout\PO GST-3.rdl';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
 
@@ -15,7 +15,9 @@ report 50022 "PO GST"
             {
             }
             column(TotalGSTAmountFinal; TotalGSTAmountFinal)
-            { }
+            {
+
+            }
             column(TotalGSTAmount; TotalGSTAmount)
             {
 
@@ -286,6 +288,14 @@ report 50022 "PO GST"
             {
 
             }
+            column(Designation1; Designation1)
+            {
+
+            }
+            column(QuoteNo; QuoteNo)
+            {
+
+            }
             dataitem("Purchase Line"; "Purchase Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");
@@ -411,26 +421,62 @@ report 50022 "PO GST"
 
                 //Amount in Words
                 // TotalAmount := 0;
-                recSalesInvoiceLine.RESET;
-                recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Purchase Header"."No.");
-                recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
-                IF recSalesInvoiceLine.FINDSET THEN
+                recPurchLine.RESET;
+                recPurchLine.SETRANGE(recPurchLine."Document No.", "Purchase Header"."No.");
+                recPurchLine.SETRANGE(Type, recPurchLine.Type::Item);
+                IF recPurchLine.FINDSET THEN
                     REPEAT
-                        TotalAmount += recSalesInvoiceLine.Amount;
-                    UNTIL recSalesInvoiceLine.NEXT = 0;
+                        TotalAmount += recPurchLine.Amount;
+                    UNTIL recPurchLine.NEXT = 0;
 
                 //Amount in Words
                 //TotalAmountFooter := 0;
-                recSalesInvoiceLine.RESET;
-                recSalesInvoiceLine.SETRANGE(recSalesInvoiceLine."Document No.", "Purchase Header"."No.");
-                recSalesInvoiceLine.SETRANGE(Type, recSalesInvoiceLine.Type::Item);
-                IF recSalesInvoiceLine.FINDSET THEN
+                recPurchLine.RESET;
+                recPurchLine.SETRANGE(recPurchLine."Document No.", "Purchase Header"."No.");
+                recPurchLine.SETRANGE(Type, recPurchLine.Type::Item);
+                IF recPurchLine.FINDSET THEN
                     REPEAT
-                        TotalAmountFooter += recSalesInvoiceLine.Amount;
-                    UNTIL recSalesInvoiceLine.NEXT = 0;
+                        TotalAmountFooter += recPurchLine.Amount;
+                    UNTIL recPurchLine.NEXT = 0;
 
 
+                recSalesReceivalesSetup.Get();
+                recPurchLine.RESET;
+                recPurchLine.SETRANGE(recPurchLine."Document No.", "Purchase Header"."No.");
+                recPurchLine.SETRANGE(Type, recPurchLine.Type::"G/L Account");
+                recPurchLine.SetRange("No.", recSalesReceivalesSetup.Frieght);
+                IF recPurchLine.FINDFIRST THEN begin
+                    Frieght := recPurchLine."Line Amount";
 
+                end;
+
+                recPurchLine.RESET;
+                recPurchLine.SETRANGE(recPurchLine."Document No.", "Purchase Header"."No.");
+                recPurchLine.SETRANGE(Type, recPurchLine.Type::"G/L Account");
+                recPurchLine.SetRange("No.", recSalesReceivalesSetup.Insurance);
+                IF recPurchLine.FINDFIRST THEN begin
+                    Insurance := recPurchLine."Line Amount";
+
+                end;
+
+
+                recPurchLine.RESET;
+                recPurchLine.SETRANGE(recPurchLine."Document No.", "Purchase Header"."No.");
+                recPurchLine.SETRANGE(Type, recPurchLine.Type::"G/L Account");
+                recPurchLine.SetRange("No.", recSalesReceivalesSetup.Courier);
+                IF recPurchLine.FINDFIRST THEN begin
+                    Frieght += recPurchLine."Line Amount";
+                    //Frieght := recPurchLine."Line Amount";
+
+                end;
+
+                RecPurchaseHeader.Reset;
+                RecPurchaseHeader.SetRange("Document Type", recPurchLine."Document Type");
+                if RecPurchaseHeader.FindFirst then begin
+
+                    Designation1 := UpperCase(CopyStr(Designation, 1, 1)) + LowerCase(CopyStr(Designation, 2));
+                    QuoteNo := UpperCase(CopyStr("Quote No.", 1, 1)) + LowerCase(CopyStr("Quote No.", 2));
+                end;
 
 
                 GetPurchaseStatisticsAmount("Purchase Header", TotalGSTAmount, TotalGSTPercent);
@@ -439,7 +485,7 @@ report 50022 "PO GST"
                 //  GSTTotalAmt := TotalGSTAmount; //IGSTTot + SGSTTot + CGSTTot; //PPCL/NSW/07  121022
 
                 repCheck.InitTextVariable;
-                repCheck.FormatNoText(AmountinWords, ROUND((TotalAmount + TotalGSTAmount)), "Purchase Header"."Currency Code");
+                repCheck.FormatNoText(AmountinWords, ROUND((TotalAmount + TotalGSTAmount), 1), "Purchase Header"."Currency Code");
 
                 repCheck.InitTextVariable;
                 repCheck.FormatNoText(IGSTWOrds, IGSTAmount/*IGSTTot*/, "Purchase Header"."Currency Code");
@@ -494,6 +540,7 @@ report 50022 "PO GST"
 
     var
         CompanyInfo: Record 79;
+        recSalesReceivalesSetup: Record 311;
         PurchHedr: Record 38;
         TotalGSTAmountlinewise: Decimal;
         TotalGSTAmountFinal: Decimal;
@@ -518,7 +565,7 @@ report 50022 "PO GST"
         repCheck: Codeunit 50000;
         AmountinWords: array[5] of Text[250];
         TotalAmount: Decimal;
-        recSalesInvoiceLine: Record 39;
+        recPurchLine: Record 39;
         SrNo: Integer;
         GLE: Record "Detailed GST Entry Buffer";
         CGST: Decimal;
@@ -571,6 +618,11 @@ report 50022 "PO GST"
         CESSLbl: Label 'CESS';
         GSTLbl: Label 'GST';
         GSTCESSLbl: Label 'GST CESS';
+        RecPurchaseHeader: Record "Purchase Header";
+        Designation1: Text;
+        QuoteNo: Text;
+
+
 
 
     // StructOrderLine: Record 13795;

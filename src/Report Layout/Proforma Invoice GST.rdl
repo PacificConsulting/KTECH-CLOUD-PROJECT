@@ -5547,6 +5547,12 @@ End Function
         <Field Name="OtherChargesFormat">
           <DataField>OtherChargesFormat</DataField>
         </Field>
+        <Field Name="ShipToGSTRegistration">
+          <DataField>ShipToGSTRegistration</DataField>
+        </Field>
+        <Field Name="ShipToPANNo">
+          <DataField>ShipToPANNo</DataField>
+        </Field>
         <Field Name="OutPutNo">
           <DataField>OutPutNo</DataField>
         </Field>

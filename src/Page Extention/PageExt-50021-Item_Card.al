@@ -69,7 +69,18 @@ pageextension 50021 Item_Card_Ext extends "Item Card"
                 ApplicationArea = all;
             }
 
+            field("Unit List Price"; Rec."Unit List Price")
+            {
+                ApplicationArea = all;
+            }
 
+
+
+
+        }
+        modify("Unit Price")
+        {
+            ApplicationArea = all;
         }
         // Add changes to page layout here
     }
