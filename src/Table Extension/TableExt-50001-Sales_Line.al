@@ -2,6 +2,22 @@ tableextension 50001 Sales_Line_Ext extends "Sales Line"
 {
     fields
     {
+        modify("No.")
+        {
+            trigger OnAfterValidate()
+            var
+                item: Record Item;
+                SalesLine: Record "Sales Line";
+            begin
+                if item.Get("No.") then begin
+                    "Technical Function/s" := item."Technical Function/s";
+
+                end;
+            end;
+
+        }
+
+
         field(50000; "No. of Packages"; Integer)
         {
             DataClassification = ToBeClassified;

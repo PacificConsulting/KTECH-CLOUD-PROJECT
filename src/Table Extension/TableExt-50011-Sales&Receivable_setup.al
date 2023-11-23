@@ -27,6 +27,10 @@ tableextension 50011 Sales_Receivable_Ext extends "Sales & Receivables Setup"
             DataClassification = ToBeClassified;
             TableRelation = "G/L Account";
         }
+        field(50006; "Over Due Mail Date"; code[2])
+        {
+            DataClassification = ToBeClassified;
+        }
 
         // Add changes to table fields here
     }

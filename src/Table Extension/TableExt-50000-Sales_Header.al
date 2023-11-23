@@ -98,29 +98,64 @@ tableextension 50000 Sales_Header_Ext extends "Sales Header"
         Text051: Label 'The sales %1 %2 already exists.';
 
 
-    procedure AssistEditFSR(OldSalesHeader: Record "Sales Header"): Boolean
+    //procedure AssistEditFSR(OldSalesHeader: Record "Sales Header"): Boolean
+    procedure AssistEditFSR(OldSalesHeader: Record "Sales Header") Result: Boolean
+    var
+        SalesHeader2: Record "Sales Header";
+        IsHandled: Boolean;
     begin
-        //PCPL-25
-        WITH SalesHeader DO BEGIN
-            COPY(Rec);
-            SalesSetup.GET;
+        IsHandled := false;
+
+        if IsHandled then
+            exit;
+
+        with SalesHeader do begin
+            Copy(Rec);
+            GetSalesSetup();
             SalesSetup.TESTFIELD("FSR No.");
-            //TestNoSeries;
-            //IF NoSeriesMgt.SelectSeries(GetNoSeriesCode,OldSalesHeader."No. Series","No. Series") THEN BEGIN
-            IF NoSeriesMgt.SelectSeries(SalesSetup."FSR No.", OldSalesHeader."No. Series", "No. Series") THEN BEGIN
-                IF ("Sell-to Customer No." = '') AND ("Sell-to Contact No." = '') THEN BEGIN
-                    HideCreditCheckDialogue := FALSE;
-                    CheckCreditMaxBeforeInsert;
-                    HideCreditCheckDialogue := TRUE;
-                END;
+            //TestNoSeries();
+            //if NoSeriesMgt.SelectSeries(GetNoSeriesCode(), OldSalesHeader."No. Series", "No. Series") then begin
+            if NoSeriesMgt.SelectSeries(SalesSetup."FSR No.", OldSalesHeader."No. Series", "No. Series") then begin
+                if ("Sell-to Customer No." = '') and ("Sell-to Contact No." = '') then begin
+                    HideCreditCheckDialogue := false;
+                    CheckCreditMaxBeforeInsert();
+                    HideCreditCheckDialogue := true;
+                end;
                 NoSeriesMgt.SetSeries("No.");
-                IF SalesHeader2.GET("Document Type", "No.") THEN
-                    ERROR(Text051, LOWERCASE(FORMAT("Document Type")), "No.");
+                if SalesHeader2.Get("Document Type", "No.") then
+                    Error(Text051, LowerCase(Format("Document Type")), "No.");
                 Rec := SalesHeader;
-                EXIT(TRUE);
-            END;
-        END;
-        //PCPL-25
+                exit(true);
+            end;
+        end;
     end;
 
+    /*
+    WITH SalesHeader DO BEGIN
+        COPY(Rec);
+        SalesSetup.Get();
+        SalesSetup.TESTFIELD("FSR No.");
+        //TestNoSeries;
+        //IF NoSeriesMgt.SelectSeries(GetNoSeriesCode,OldSalesHeader."No. Series","No. Series") THEN BEGIN
+        IF NoSeriesMgt.SelectSeries(SalesSetup."FSR No.", OldSalesHeader."No. Series", "No. Series") THEN BEGIN
+            IF ("Sell-to Customer No." = '') AND ("Sell-to Contact No." = '') THEN BEGIN
+                HideCreditCheckDialogue := FALSE;
+                CheckCreditMaxBeforeInsert;
+                HideCreditCheckDialogue := TRUE;
+            END;
+            NoSeriesMgt.SetSeries("No.");
+            IF SalesHeader2.GET("Document Type", "No.") THEN
+                ERROR(Text051, LOWERCASE(FORMAT("Document Type")), "No.");
+            Rec := SalesHeader;
+            EXIT(TRUE);
+        END;
+    END;
+    //PCPL-25
+end;
+*/
+
+    local procedure GetSalesSetup()
+    begin
+        SalesSetup.Get();
+    end;
 }
