@@ -121,7 +121,7 @@ report 50022 "PO GST"
             }
             column(Logo; CompanyInfo.Picture)
             {
-            }
+            }//
             column(add; Add)
             {
             }
