@@ -5,6 +5,7 @@ tableextension 50000 Sales_Header_Ext extends "Sales Header"
         field(50022; "Customer Order No."; Code[20])
         {
             DataClassification = ToBeClassified;
+            //
         }
         field(50050; "CC Attched"; Text[250])
         {
